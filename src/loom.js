@@ -13,12 +13,12 @@ function Loom(radius, numberOfPins){
   }
   this.drawLine = (startPinIndex, stopPinIndex)=>{
     strokeWeight(1);
-    stroke(255);
+    stroke(0,0,0,50)
     line(this.pins[startPinIndex].x, this.pins[startPinIndex].y, this.pins[stopPinIndex].x,this.pins[stopPinIndex].y);
   }
   this.draw = ()=>{
     noFill();
-    stroke(255);
+    stroke(0);
     strokeWeight(1);
     ellipse(0, 0, loomRadius*2);
     this.drawPoints();

@@ -15,8 +15,8 @@ Tool to create string art written in p5.js
     * [ ] number of connections
     * [ ] diameter of the loom (in cm)
 * [x] function to connect pin to a pin with string
-* [ ] load image from the user
-* [ ] preprocess the image
+* [x] load image from the user
+* [x] preprocess the image
 * [ ] Create the algorithm to find the path
   * [ ] start at random pin
   * [ ] loop through every pin and check how closer to the input image are we
