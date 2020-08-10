@@ -4,17 +4,17 @@ Tool to create string art written in p5.js
 
 ## ToDo
 
-* [ ] Create a simple HTML page
-* [ ] Import p5.js
-  * [ ] https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js
-* [ ] Create canvas
-* [ ] Create loom
-  * [ ] number each pin in an array
+* [x] Create a simple HTML page
+* [x] Import p5.js
+  * [x] [https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js](https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js)
+* [x] Create canvas
+* [x] Create loom
+  * [x] number each pin in an array
   * [ ] slider or textinput for
     * [ ] number of pins
     * [ ] number of connections
     * [ ] diameter of the loom (in cm)
-* [ ] function to connect pin to a pin with string
+* [x] function to connect pin to a pin with string
 * [ ] load image from the user
 * [ ] preprocess the image
 * [ ] Create the algorithm to find the path
@@ -28,6 +28,6 @@ Tool to create string art written in p5.js
 * [ ] generate .png file of the loom
 * [ ] serve these files for user to download
 
-### Additional features
+## Additional features
 
 * [ ] configurable color of the string/background
