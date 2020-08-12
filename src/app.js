@@ -1,10 +1,17 @@
 const width = 720;
 const height = width;
 const numberOfPins=100;
-const loomRadius = 320;
+const loomRadius=320;
 const loom = new Loom(loomRadius, numberOfPins)
+let linesCanvas;
 let img;
 let maskImage;
+let flag = 0;
+let sumReference;
+let steps = [0]
+let lowestDifference = (loomRadius*2*255)**2;
+let lowestDifferencePoint = 0;
+let currentDifference;
 
 function preload(){
   img = loadImage("../assets/cat.jpg");
@@ -12,26 +19,50 @@ function preload(){
 }
 function setup(){
   createCanvas(width*2,height);
-  maskImage = createGraphics(loomRadius*2, loomRadius*2);
+  linesCanvas = createGraphics(loomRadius*2, loomRadius*2);
+  linesCanvas.translate(loomRadius, loomRadius);
+  maskImage = createGraphics(loomRadius, loomRadius);
   maskImage.background(0,0);
   maskImage.fill(255);
-  maskImage.ellipse(loomRadius, loomRadius, loomRadius*2);
-  console.log("mask created")
-  mask(img, maskImage);
-  console.log("mask applied")
+  maskImage.ellipse(loomRadius/2, loomRadius/2, loomRadius);
+  console.log("mask created");
   bw(img);
-  console.log("bw filter applied")
+  console.log("bw filter applied");
+  mask(img, maskImage);
+  console.log("mask applied");
+  sumReference = getSumOfImage(img);
+  console.log("calculated reference image sum");
 }
 function draw(){
-  background(255);
+  console.log(steps.concat(flag))
+  background(100,0,70);
+
   push()
   translate(width, 0);
-  //img.mask(maskImage);
-  image(img, width/2-loomRadius, height/2-loomRadius, img.width, img.height);
+  image(img, width/2-loomRadius, height/2-loomRadius, img.width*2, img.height*2);
   pop()
+
+  image(linesCanvas, width/2-loomRadius, height/2-loomRadius, linesCanvas.width, linesCanvas.height);
   translate(width/2, height/2);
-  loom.draw();
-  loom.drawLine(0, 50);
+
+  loom.drawPoints();
+  linesCanvas.background(255)
+  loom.drawLines(steps.concat(flag));
+  
+  currentDifference =compare(linesCanvas, sumReference);
+  if (currentDifference < lowestDifference){
+    lowestDifference = currentDifference;
+    lowestDifferencePoint = flag;
+    //console.log(`found lowest ${lowestDifferencePoint}`)
+  } /*else {
+    console.log(`current: ${currentDifference} lowest: ${lowestDifference}`)
+  }*/
+  flag++;
+  if(flag>numberOfPins-1){
+    flag=0;
+    console.log(`best pin is ${lowestDifferencePoint}`)
+    steps.push(lowestDifferencePoint)
+  }
 }
 function mask(i, m){
   i.loadPixels()
@@ -39,7 +70,7 @@ function mask(i, m){
   for (let x = 0; x < i.width; x++) {
     for (let y = 0; y < i.height; y++) {
       const c = m.get(x,y)
-      if(c[3]===0){i.set(x, y, c);}
+      if(c[3]===0){i.set(x, y, [255,255,255,255]);}
     }
   }
   i.updatePixels()
@@ -56,4 +87,19 @@ function bw(img){
     }
   }
   img.updatePixels()
+}
+function getSumOfImage(input){
+  let output = 0;
+  input.loadPixels();
+  for (let x = 0; x < input.width; x++) {
+    for (let y = 0; y < input.height; y++) {
+      output+=input.get(x,y)[0];
+    }
+  }
+  return output
+  
+}
+function compare(lines, sumReference){
+  const sumLines = getSumOfImage(lines);
+  return sumLines - (sumReference*4);
 }

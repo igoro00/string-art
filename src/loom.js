@@ -11,10 +11,18 @@ function Loom(radius, numberOfPins){
       pin.draw(7);
     });
   }
+  this.drawLines = (steps)=>{
+    for(let i = 1; i<steps.length;i++){
+      this.drawLine(steps[i-1], steps[i]);
+    }
+  }
   this.drawLine = (startPinIndex, stopPinIndex)=>{
-    strokeWeight(1);
-    stroke(0,0,0,50)
-    line(this.pins[startPinIndex].x, this.pins[startPinIndex].y, this.pins[stopPinIndex].x,this.pins[stopPinIndex].y);
+    linesCanvas.strokeWeight(1);
+    linesCanvas.stroke(0,0,0,255);
+    linesCanvas.line(this.pins[startPinIndex].x, 
+                     this.pins[startPinIndex].y, 
+                     this.pins[stopPinIndex].x,
+                     this.pins[stopPinIndex].y);
   }
   this.draw = ()=>{
     noFill();

@@ -18,12 +18,12 @@ Tool to create string art written in p5.js
 * [x] load image from the user
 * [x] preprocess the image
 * [ ] Create the algorithm to find the path
-  * [ ] start at random pin
-  * [ ] loop through every pin and check how closer to the input image are we
-  * [ ] pick the best pin and connect to it
-  * [ ] save the move to the array of moves
+  * [x] start at random pin
+  * [x] loop through every pin and check how closer to the input image are we
+  * [x] pick the best pin and connect to it
+  * [x] save the move to the array of moves
   * [ ] calculate used string lenght and add it to some variable
-  * [ ] start the function again, starting from where we left
+  * [x] start the function again, starting from where we left
 * [ ] generate a file with steps (list of pin's indexes) to recreate this irl
 * [ ] generate .png file of the loom
 * [ ] serve these files for user to download
