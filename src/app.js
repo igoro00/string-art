@@ -9,7 +9,7 @@ let maskImage;
 let flag = 0;
 let sumReference;
 let steps = [0]
-let lowestDifference = (loomRadius*2*255)**2;
+let lowestDifference = (loomRadius*2*4*255)**2;
 let lowestDifferencePoint = 0;
 let currentDifference;
 
@@ -89,15 +89,8 @@ function bw(img){
   img.updatePixels()
 }
 function getSumOfImage(input){
-  let output = 0;
   input.loadPixels();
-  for (let x = 0; x < input.width; x++) {
-    for (let y = 0; y < input.height; y++) {
-      output+=input.get(x,y)[0];
-    }
-  }
-  return output
-  
+  return input.pixels.reduce((a, b) => a + b, 0);
 }
 function compare(lines, sumReference){
   const sumLines = getSumOfImage(lines);

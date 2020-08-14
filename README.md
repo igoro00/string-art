@@ -19,7 +19,9 @@ Tool to create string art written in p5.js
 * [x] preprocess the image
 * [ ] Create the algorithm to find the path
   * [x] start at random pin
-  * [x] loop through every pin and check how closer to the input image are we
+  * [ ] loop through every pin and check how closer to the input image are we
+    * [ ] break up both images into smaller pieces (8px*8px? 16px*16px?)
+    * [ ] compare averages
   * [x] pick the best pin and connect to it
   * [x] save the move to the array of moves
   * [ ] calculate used string lenght and add it to some variable
