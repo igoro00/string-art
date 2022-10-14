@@ -1,6 +1,6 @@
 const width = 720;
 const height = width;
-const numberOfPins = 500;
+const numberOfPins = 50;
 const loomRadius = 320;
 const chunks = 64;
 const loom = new Loom(loomRadius, numberOfPins);
@@ -8,7 +8,8 @@ const loom = new Loom(loomRadius, numberOfPins);
 let fpsTracker;
 let linesCountTracker;
 let fitnessTracker;
-let realLengthTracker;
+let stepsTracker;
+let bestMovesTracker;
 
 let realLoomDiameter = 1; //diameter in metres
 
@@ -18,9 +19,8 @@ let maskImage;
 let currentPin = 0;
 let sumReference;
 let steps = [0];
-let lowestDifference = (loomRadius * 2 * 4 * 255) ** 2;
-let lowestDifferencePoint = 0;
-let currentDifference;
+let bestMoves = [];
+let lowestDifference;
 
 function preload() {
   img = loadImage("../test.jpg");
@@ -31,7 +31,8 @@ function setup() {
   fpsTracker = createElement("p", "0fps");
   linesCountTracker = createElement("p", "0 lines");
   fitnessTracker = createElement("p", "255 fitness");
-  realLengthTracker = createElement("p", "0 m");
+  stepsTracker = createElement("p", "Steps []");
+  bestMovesTracker = createElement("p", "[]");
 
   linesCanvas = createGraphics(loomRadius * 2, loomRadius * 2);
   linesCanvas.translate(loomRadius, loomRadius);
@@ -41,18 +42,15 @@ function setup() {
   maskImage.ellipse(loomRadius / 2, loomRadius / 2, loomRadius);
   img.mask(maskImage);
   replaceColor(img, [0, 0, 0, 0], [255, 255, 255, 255]);
-
-  setInterval(() => {
-    fpsTracker.html(`${frameRate()} fps`);
-    linesCountTracker.html(`${steps.length} lines`);
-    fitnessTracker.html(`${lowestDifference} fitness`);
-    realLengthTracker.html(
-      `${loom.getRealStringLen(steps, realLoomDiameter)} metres`
-    );
-  }, 1000);
 }
 
 function draw() {
+  fpsTracker.html(`${frameRate()} fps`);
+  linesCountTracker.html(`${steps.length} lines`);
+  fitnessTracker.html(`${lowestDifference} lowestDifference`);
+  stepsTracker.html(`Steps: ${JSON.stringify(steps.concat(currentPin))}`);
+  bestMovesTracker.html(`BestMoves: ${JSON.stringify(bestMoves)}`);
+
   background(100, 0, 70);
 
   push();
@@ -79,22 +77,35 @@ function draw() {
   loom.draw();
   linesCanvas.background(255);
   loom.drawLines(steps.concat(currentPin));
-
+  //check if it was a good move
+  const difference = getDifference();
+  if (difference < lowestDifference || lowestDifference == undefined) {
+    lowestDifference = difference;
+    bestMoves = [currentPin];
+  } else if (difference === lowestDifference) {
+    bestMoves.push(currentPin);
+  }
   pop();
-  currentPin++;
+  if (currentPin >= numberOfPins - 1) {
+    //get the best move so far and reset current pin
+    steps.push(bestMoves.random());
+    bestMoves = [];
+    currentPin = 0;
+  } else {
+    currentPin++;
+  }
 }
 
 function getDifference() {
   img.loadPixels();
   linesCanvas.loadPixels();
-  currentDifference = 0;
+  let difference = 0;
   for (let x = 0; x < img.width; x++) {
     for (let y = 0; y < img.height; y++) {
-      currentDifference += Math.abs(
-        img.get(x, y)[0] - linesCanvas.get(x, y)[0]
-      );
+      difference += Math.abs(img.get(x, y)[0] - linesCanvas.get(x, y)[0]);
     }
   }
+  return difference;
 }
 
 function replaceColor(i, sourceColor, destinationColor) {
@@ -116,3 +127,7 @@ function compareArrays(a1, a2) {
   }
   return true;
 }
+
+Array.prototype.random = function () {
+  return this[Math.floor(Math.random() * this.length)];
+};
