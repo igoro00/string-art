@@ -100,10 +100,8 @@ function getDifference() {
   img.loadPixels();
   linesCanvas.loadPixels();
   let difference = 0;
-  for (let x = 0; x < img.width; x++) {
-    for (let y = 0; y < img.height; y++) {
-      difference += Math.abs(img.get(x, y)[0] - linesCanvas.get(x, y)[0]);
-    }
+  for (let i = 0; i < img.pixels.length; i++) {
+    difference += Math.abs(img.pixels[i] - linesCanvas.pixels[i]);
   }
   return difference;
 }
