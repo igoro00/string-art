@@ -1,6 +1,6 @@
 const width = 720;
 const height = width;
-const numberOfPins = 50;
+const numberOfPins = 100;
 const loomRadius = 320;
 const chunks = 64;
 const loom = new Loom(loomRadius, numberOfPins);
@@ -101,7 +101,13 @@ function getDifference() {
   linesCanvas.loadPixels();
   let difference = 0;
   for (let i = 0; i < img.pixels.length; i++) {
-    difference += Math.abs(img.pixels[i] - linesCanvas.pixels[i]);
+    linesPixel = linesCanvas.pixels[i];
+    imgPixel = img.pixels[i];
+    if (linesPixel < imgPixel) {
+      difference += Math.abs(img.pixels[i] - linesCanvas.pixels[i]) * 100;
+    } else {
+      difference += Math.abs(img.pixels[i] - linesCanvas.pixels[i]);
+    }
   }
   return difference;
 }
